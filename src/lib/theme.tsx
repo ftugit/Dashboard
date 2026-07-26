@@ -33,15 +33,16 @@ export function ThemeProvider(props: { children: JSX.Element }) {
     const savedTheme = localStorage.getItem(THEME_KEY);
     if (savedTheme === "dark" || savedTheme === "light") setThemeSig(savedTheme);
 
-    // Apply whatever we ended up with.
-    document.body.style.setProperty("--hue", String(hue()));
+    // Apply whatever we ended up with. Set on <html> (same element as :root)
+    // so the inline value overrides the `--hue` declared in the stylesheet.
+    document.documentElement.style.setProperty("--hue", String(hue()));
     document.documentElement.classList.toggle("dark", theme() === "dark");
   });
 
   const applyHue = (h: number) => {
     const v = Math.max(0, Math.min(360, Math.round(h)));
     setHueSig(v);
-    document.body.style.setProperty("--hue", String(v));
+    document.documentElement.style.setProperty("--hue", String(v));
     localStorage.setItem(HUE_KEY, String(v));
   };
 

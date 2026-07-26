@@ -1,13 +1,7 @@
-import { createSignal, For } from "solid-js";
+import { For } from "solid-js";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
-import {
-  Slider,
-  SliderTrack,
-  SliderThumb,
-  SliderLabel,
-  SliderValueLabel
-} from "~/components/ui/slider";
+import { Slider, SliderTrack, SliderThumb } from "~/components/ui/slider";
 import { useTheme } from "~/lib/theme";
 
 // Preset accent hues (a quick row of swatches: slate, blue, green, ...).
@@ -23,20 +17,14 @@ const presets = [
 ];
 
 /**
- * Task 2: change the accent hue of the whole template. The hue is a plain
- * number and is written to `document.body` as `--hue` (CSS falls back to 200).
- * The slider track shows the full hue palette via a CSS gradient (SolidUI
- * Slider supports a custom track background, so no custom slider is needed).
+ * Change the accent hue of the whole template. The hue is a plain number and is
+ * written to `document.documentElement` as `--hue` (the stylesheet falls back
+ * to 200). The slider track shows the full hue palette via a CSS gradient
+ * (SolidUI Slider supports a custom track background, so no custom slider is
+ * needed). The current value is shown in a persistent span.
  */
 export function AppearanceControl() {
   const { hue, setHue } = useTheme();
-  // Local mirror so dragging feels smooth; committed to the store on change.
-  const [local, setLocal] = createSignal(hue());
-
-  const onChange = (value: number[]) => {
-    setLocal(value[0]);
-    setHue(value[0]);
-  };
 
   return (
     <Card>
@@ -53,15 +41,15 @@ export function AppearanceControl() {
             class="size-10 shrink-0 rounded-full border shadow-inner"
             style={{ "background-color": `hsl(${hue()} 84% 55%)` }}
           />
-          <div class="flex-1">
-            <Slider value={[local()]} onChange={onChange} min={0} max={360} step={1} class="w-full">
-              <SliderLabel>Hue</SliderLabel>
+          {/* px-3 insets the track so the thumb never overflows the container. */}
+          <div class="flex-1 px-3">
+            <Slider value={[hue()]} onChange={(v) => setHue(v[0])} min={0} max={360} step={1} class="w-full">
               <SliderTrack class="bg-[linear-gradient(to_right,hsl(0_84%_55%),hsl(60_84%_55%),hsl(120_84%_55%),hsl(180_84%_55%),hsl(240_84%_55%),hsl(300_84%_55%),hsl(360_84%_55%))]">
                 <SliderThumb />
               </SliderTrack>
-              <SliderValueLabel>{hue()}</SliderValueLabel>
             </Slider>
           </div>
+          <span class="w-12 shrink-0 text-right font-medium tabular-nums">{hue()}</span>
         </div>
 
         <div>
@@ -76,10 +64,7 @@ export function AppearanceControl() {
                   size="sm"
                   class="gap-2"
                   classList={{ "border-2": hue() === p.hue }}
-                  onClick={() => {
-                    setLocal(p.hue);
-                    setHue(p.hue);
-                  }}
+                  onClick={() => setHue(p.hue)}
                 >
                   <span
                     class="size-3 rounded-full"
