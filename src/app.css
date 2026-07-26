@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --hue: 200;
+
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+
+    --primary: var(--hue) 84% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: var(--hue) 40% 94%;
+    --secondary-foreground: var(--hue) 50% 25%;
+
+    --accent: var(--hue) 80% 92%;
+    --accent-foreground: var(--hue) 60% 25%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --info: 204 94% 94%;
+    --info-foreground: 199 89% 48%;
+
+    --success: 149 80% 90%;
+    --success-foreground: 160 84% 39%;
+
+    --warning: 48 96% 89%;
+    --warning-foreground: 25 95% 53%;
+
+    --error: 0 93% 94%;
+    --error-foreground: 0 84% 60%;
+
+    --ring: var(--hue) 84% 55%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --hue: 200;
+
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --primary: var(--hue) 84% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: var(--hue) 30% 20%;
+    --secondary-foreground: var(--hue) 60% 85%;
+
+    --accent: var(--hue) 35% 22%;
+    --accent-foreground: var(--hue) 80% 85%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --info: 204 94% 94%;
+    --info-foreground: 199 89% 48%;
+
+    --success: 149 80% 90%;
+    --success-foreground: 160 84% 39%;
+
+    --warning: 48 96% 89%;
+    --warning-foreground: 25 95% 53%;
+
+    --error: 0 93% 94%;
+    --error-foreground: 0 84% 60%;
+
+    --ring: var(--hue) 84% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  /* Floating "main header" — visible on desktop, hidden on mobile */
+  .float-header {
+    @apply hidden md:flex items-center gap-2 rounded-xl border bg-card/80 px-3 py-2 shadow-sm backdrop-blur;
+  }
+
+  /* Bottom floating bar — visible on mobile, hidden on desktop.
+     It hosts the sidebar trigger + the route-provided action buttons. */
+  .float-bottom {
+    @apply fixed inset-x-0 bottom-0 z-40 flex items-center gap-2 border-t bg-card/95 px-3 py-2 shadow-[0_-2px_10px_rgba(0,0,0,0.06)] backdrop-blur md:hidden;
+  }
+
+  .nav-link {
+    @apply flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground;
+  }
+
+  .nav-link-active {
+    @apply bg-accent text-accent-foreground;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+  @apply bg-accent;
+}
+::-webkit-scrollbar-corner {
+  display: none;
+}
