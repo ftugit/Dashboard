@@ -21,6 +21,7 @@ export function FloatingHeader() {
       <div class="ml-auto flex items-center gap-2">
         <BreakpointBadge />
         <PwaUpdateButton />
+        <InstallButton />
         <ThemeToggle />
         <For each={header().right}>{(Slot) => <Slot />}</For>
       </div>

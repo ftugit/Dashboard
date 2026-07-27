@@ -32,9 +32,11 @@ export default defineConfig({
         },
         workbox: {
           globPatterns: ["**/*.{js,css,html,svg,png,ico,woff2}"],
-          // SSR app has no index.html, so point the offline fallback at a real
-          // precached page instead of the plugin's default "index.html".
-          navigateFallback: "/offline.html",
+          // SSR app: no HTML navigate-fallback needed. Visited pages are cached
+          // for offline via runtimeCaching (NetworkFirst). Explicitly disabling
+          // navigateFallback overrides the plugin's default "index.html" and
+          // avoids workbox's non-precached-url error at SW startup.
+          navigateFallback: undefined,
           runtimeCaching: [
             {
               urlPattern: ({ request }) => request.mode === "navigate",

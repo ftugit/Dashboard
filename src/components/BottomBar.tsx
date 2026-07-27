@@ -2,6 +2,7 @@ import { For } from "solid-js";
 import { useRouteHeader } from "~/lib/header";
 import { MobileDrawerSidebar } from "~/components/MobileDrawerSidebar";
 import { PwaUpdateButton } from "~/components/PwaUpdateButton";
+import { InstallButton } from "~/components/InstallButton";
 import { ThemeToggle } from "~/components/ThemeToggle";
 
 /**
@@ -20,6 +21,7 @@ export function BottomBar() {
       <For each={[...(header().left ?? []), ...(header().right ?? [])]}>{(Slot) => <Slot />}</For>
       <div class="ml-auto flex items-center gap-2">
         <PwaUpdateButton />
+        <InstallButton />
         <ThemeToggle />
       </div>
     </div>
