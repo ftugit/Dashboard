@@ -43,7 +43,7 @@ export function AppearanceControl() {
           />
           {/* px-3 insets the track so the thumb never overflows the container. */}
           <div class="flex-1 px-3">
-            <Slider value={[hue()]} onChange={(v) => setHue(v[0])} min={0} max={360} step={1} class="w-full">
+            <Slider value={[hue()]} onChange={(v) => setHue(v[0])} minValue={0} maxValue={360} step={1} class="w-full">
               <SliderTrack class="bg-[linear-gradient(to_right,hsl(0_84%_55%),hsl(60_84%_55%),hsl(120_84%_55%),hsl(180_84%_55%),hsl(240_84%_55%),hsl(300_84%_55%),hsl(360_84%_55%))]">
                 <SliderThumb />
               </SliderTrack>
