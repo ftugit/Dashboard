@@ -13,6 +13,7 @@ export default createHandler(() => (
           <link rel="apple-touch-icon" href="/pwa-192x192.png" />
           <link rel="manifest" href="/_build/manifest.json" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta name="mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="default" />
           {assets}
         </head>

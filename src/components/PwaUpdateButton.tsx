@@ -1,12 +1,6 @@
-import { createSignal, onMount, Show } from "solid-js";
 import { Button } from "~/components/ui/button";
 import { toast } from "solid-sonner";
-
-type RegisterSW = {
-  needRefresh: () => boolean;
-  offlineReady: () => boolean;
-  updateSW: (reload?: boolean) => Promise<void>;
-};
+import { useRegisterSW } from "virtual:pwa-register/solid";
 
 const RefreshIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4">
@@ -16,48 +10,40 @@ const RefreshIcon = (
 );
 
 /**
- * Task 3: lets the user install the site as an app (handled by the manifest +
- * service worker from vite-plugin-pwa) and shows a PWA update notification via
- * a toast when a new version is available. The registration is loaded lazily on
- * the client (virtual:pwa-register/solid) so SSR is unaffected.
+ * PWA update button. Uses the Solid virtual module from vite-plugin-pwa.
+ * Note: in the Solid variant `needRefresh`/`offlineReady` are returned as
+ * Solid signal tuples `[accessor, setter]`, and the update fn is
+ * `updateServiceWorker` (not `updateSW`).
  */
 export function PwaUpdateButton() {
-  const [available, setAvailable] = createSignal(false);
-  let reg: RegisterSW | undefined;
-
-  onMount(async () => {
-    const { useRegisterSW } = await import("virtual:pwa-register/solid");
-    reg = useRegisterSW({
-      onNeedRefresh() {
-        setAvailable(true);
-        toast("A new version of the app is available", {
-          action: {
-            label: "Reload",
-            onClick: () => reg?.updateSW(true)
-          }
-        });
-      },
-      onOfflineReady() {
-        toast.success("App is ready to work offline");
-      }
-    });
+  const {
+    needRefresh: [needRefresh],
+    updateServiceWorker
+  } = useRegisterSW({
+    onNeedRefresh() {
+      toast("A new version is available", {
+        action: {
+          label: "Reload",
+          onClick: () => updateServiceWorker(true)
+        }
+      });
+    },
+    onOfflineReady() {
+      toast.success("App is ready to work offline");
+    }
   });
 
-  const onClick = () => {
-    if (reg?.needRefresh()) {
-      toast("Reloading to the latest version…");
-      reg.updateSW(true);
-    } else {
-      toast.success("You are on the latest version.");
-    }
-  };
-
   return (
-    <Button variant="outline" size="sm" class="gap-2" onClick={onClick}>
+    <Button
+      variant="outline"
+      size="sm"
+      class="h-9 px-3 text-xs gap-2"
+      onClick={() => {
+        if (needRefresh()) updateServiceWorker(true);
+        else toast("No update available right now");
+      }}
+    >
       {RefreshIcon}
-      <Show when={available()}>
-        <span class="size-2 rounded-full bg-success" />
-      </Show>
       Update
     </Button>
   );

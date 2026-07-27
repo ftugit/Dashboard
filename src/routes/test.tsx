@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/com
 import { Badge } from "~/components/ui/badge";
 import { MobileSidebar } from "~/components/MobileSidebar";
 import { AuthForm } from "~/components/auth/AuthForm";
+import { toast } from "solid-sonner";
 import {
   Dialog,
   DialogTrigger,
@@ -15,6 +16,42 @@ import {
   DialogFooter
 } from "~/components/ui/dialog";
 import { TestModal } from "~/components/dashboard/TestModal";
+
+// Buttons to exercise every toast variant so the toaster can be verified
+// independently of the PWA update flow.
+function ToastDemo() {
+  return (
+    <div class="flex flex-wrap gap-2">
+      <Button onClick={() => toast("Default toast message")}>Default</Button>
+      <Button variant="outline" onClick={() => toast.success("Saved successfully")}>
+        Success
+      </Button>
+      <Button variant="outline" onClick={() => toast.error("Something went wrong")}>
+        Error
+      </Button>
+      <Button variant="outline" onClick={() => toast.info("Heads up, info here")}>
+        Info
+      </Button>
+      <Button variant="outline" onClick={() => toast.warning("Be careful")}>
+        Warning
+      </Button>
+      <Button variant="outline" onClick={() => toast.message("Plain message")}>
+        Message
+      </Button>
+      <Button
+        variant="outline"
+        onClick={() =>
+          toast.promise(
+            new Promise((r) => setTimeout(r, 1500)),
+            { loading: "Loading…", success: "Done!", error: "Failed" }
+          )
+        }
+      >
+        Promise
+      </Button>
+    </div>
+  );
+}
 
 // Button that launches the OLD (Sheet) sidebar variant.
 function OldSidebarButton() {
@@ -90,6 +127,18 @@ export default function Test() {
             <OldSidebarButton />
             <TestModal />
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Toast examples</CardTitle>
+          <CardDescription class="mt-1">
+            Every toast variant — independent of the PWA update flow.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ToastDemo />
         </CardContent>
       </Card>
     </div>
