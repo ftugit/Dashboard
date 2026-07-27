@@ -15,6 +15,9 @@ export default createHandler(() => (
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+          {/* No-flash theme + hue: runs before first paint, mirroring what
+              ThemeProvider applies on mount. Keys must match lib/theme.tsx. */}
+          <script>{`(function(){try{var h=localStorage.getItem('soliddash:hue');if(h!==null){h=parseInt(h,10);if(!isNaN(h)&&h>=0&&h<=360){document.documentElement.style.setProperty('--hue',String(h));}}var t=localStorage.getItem('soliddash:theme');if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`}</script>
           {assets}
         </head>
         <body>
