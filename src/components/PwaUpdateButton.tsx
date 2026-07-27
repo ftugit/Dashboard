@@ -20,6 +20,7 @@ export function PwaUpdateButton() {
     needRefresh: [needRefresh],
     updateServiceWorker
   } = useRegisterSW({
+    scope: "/",
     onNeedRefresh() {
       toast("A new version is available", {
         action: {

@@ -2,6 +2,7 @@ import { For } from "solid-js";
 import { useRouteHeader } from "~/lib/header";
 import { BreakpointBadge } from "~/components/BreakpointBadge";
 import { PwaUpdateButton } from "~/components/PwaUpdateButton";
+import { InstallButton } from "~/components/InstallButton";
 import { ThemeToggle } from "~/components/ThemeToggle";
 
 /**

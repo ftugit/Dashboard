@@ -5,12 +5,12 @@ export default defineConfig({
   vite: {
     plugins: [
       VitePWA({
-        // vinxi serves static assets (incl. the SW + manifest) under /_build/.
-        // We emit the manifest as .json because Nitro serves that extension as
-        // a static file (it swallows .webmanifest into the SPA fallback).
-        manifestFilename: "manifest.json",
+        // SW stays at /_build/sw.js (vinxi asset base). We grant it ROOT scope
+        // via the Service-Worker-Allowed header (added in `server.routeRules`
+        // below) and register it with scope "/".
         registerType: "prompt",
         injectRegister: null,
+        manifestFilename: "manifest.json",
         devOptions: {
           enabled: true,
           type: "module"
@@ -32,9 +32,37 @@ export default defineConfig({
         },
         workbox: {
           globPatterns: ["**/*.{js,css,html,svg,png,ico,woff2}"],
-          navigateFallback: "/index.html"
+          // SSR app has no index.html, so point the offline fallback at a real
+          // precached page instead of the plugin's default "index.html".
+          navigateFallback: "/offline.html",
+          runtimeCaching: [
+            {
+              urlPattern: ({ request }) => request.mode === "navigate",
+              handler: "NetworkFirst",
+              options: {
+                cacheName: "pages",
+                networkTimeoutSeconds: 3,
+                cacheableResponse: { statuses: [0, 200, 301, 302] }
+              }
+            },
+            {
+              urlPattern: /\.(?:js|css|woff2?|png|svg|ico)$/,
+              handler: "StaleWhileRevalidate",
+              options: { cacheName: "assets" }
+            }
+          ]
         }
       })
     ]
+  },
+  // Forwarded by vinxi into Nitro's routeRules via createNitro({...server}).
+  server: {
+    routeRules: {
+      "/_build/sw.js": {
+        headers: {
+          "Service-Worker-Allowed": "/"
+        }
+      }
+    }
   }
 });
